@@ -1,4 +1,4 @@
-# Copyright (c) 2022. Bommarito Consulti:ng, LLC
+# Copyright (c) 2022. Bommarito Consulting, LLC
 # SPDX-License-Identifier: Apache-2.0
 
 # standard library imports

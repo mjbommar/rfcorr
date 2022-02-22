@@ -7,6 +7,7 @@ from typing import Union, Callable
 # package imports
 import numpy
 import sklearn.ensemble
+import sklearn.inspection
 
 # local imports
 from .sign import sign_without_zero
@@ -20,6 +21,8 @@ def get_corr_classification(X: numpy.array,
                             max_features: Union[str, int, float] = "auto",
                             max_depth: int = None,
                             bootstrap: bool = True,
+                            use_permutation: bool = False,
+                            permutation_n: int = 5,
                             random_state: numpy.random.RandomState = None):
     """
     Get an extra trees forest correlation with classifier-based feature importance
@@ -28,23 +31,34 @@ def get_corr_classification(X: numpy.array,
     :param X: The input array.
     :param y: The output array.
     :param transform: A function to transform the label array if it is continuous
-    :param num_trees: The number of decision trees in the random forest ensemble.
+    :param num_trees: The number of decision trees in the extra trees ensemble.
     :param criterion: The function to measure the quality of a split.
-    :param max_features: The number of features for the random forest model.
+    :param max_features: The number of features for the extra trees model.
     :param max_depth: The maximum depth of the tree.
     :param bootstrap: Whether to use bootstrap sampling.
+    :param use_permutation: Whether to use permutation importance.
+    :param permutation_n: The number of permutations repeat samples to use.
     :param random_state: numpy random state to use.
     :return: The correlation between X and y.
 
     """
     et_model = sklearn.ensemble.ExtraTreesClassifier(n_estimators=num_trees,
-                                                     criterion=criterion,
+                                                       criterion=criterion,
                                                        max_features=max_features,
                                                        max_depth=max_depth,
                                                        bootstrap=bootstrap,
                                                        random_state=random_state) \
         .fit(X, transform(y))
-    return et_model.feature_importances_
+
+    # handle permutation importance case
+    if use_permutation:
+        return sklearn.inspection.permutation_importance(et_model,
+                                                         X,
+                                                         y,
+                                                         n_repeats=permutation_n,
+                                                         random_state=random_state)
+    else:
+        return et_model.feature_importances_
 
 
 def get_corr_regression(X: numpy.array,
@@ -54,6 +68,8 @@ def get_corr_regression(X: numpy.array,
                         max_features: Union[str, int, float] = "auto",
                         max_depth: int = None,
                         bootstrap: bool = True,
+                        use_permutation: bool = False,
+                        permutation_n: int = 5,
                         random_state: numpy.random.RandomState = None):
     """
     Get an extra trees forest correlation with classifier-based feature importance
@@ -61,22 +77,32 @@ def get_corr_regression(X: numpy.array,
 
     :param X: The input array.
     :param y: The output array.
-    :param num_trees: The number of decision trees in the random forest ensemble.
+    :param num_trees: The number of decision trees in the extra trees ensemble.
     :param criterion: The function to measure the quality of a split.
-    :param max_features: The number of features for the random forest model.
+    :param max_features: The number of features for the extra trees model.
     :param max_depth: The maximum depth of the tree.
     :param random_state: numpy random state to use.
     :param bootstrap: Whether to use bootstrap sampling.
+    :param use_permutation: Whether to use permutation importance.
+    :param permutation_n: The number of permutations repeat samples to use.
     :return: The correlation between X and y.
     """
     et_model = sklearn.ensemble.ExtraTreesRegressor(n_estimators=num_trees,
-                                                    criterion=criterion,
+                                                      criterion=criterion,
                                                       max_features=max_features,
                                                       max_depth=max_depth,
                                                       bootstrap=bootstrap,
                                                       random_state=random_state) \
         .fit(X, y)
-    return et_model.feature_importances_
+    # handle permutation importance case
+    if use_permutation:
+        return sklearn.inspection.permutation_importance(et_model,
+                                                         X,
+                                                         y,
+                                                         n_repeats=permutation_n,
+                                                         random_state=random_state)
+    else:
+        return et_model.feature_importances_
 
 
 def get_corr(X: numpy.array,
@@ -87,6 +113,8 @@ def get_corr(X: numpy.array,
              max_features: Union[str, int, float] = "auto",
              max_depth: int = None,
              bootstrap: bool = True,
+             use_permutation: bool = False,
+             permutation_n: int = 5,
              random_state: numpy.random.RandomState = None):
     """
     Get the "correlation" between array of features X and target column y.
@@ -94,11 +122,13 @@ def get_corr(X: numpy.array,
     :param X: The input array.
     :param y: The output array.
     :param method: The method to use: classification or regression
-    :param num_trees: The number of decision trees in the random forest ensemble.
+    :param num_trees: The number of decision trees in the extra trees ensemble.
     :param criterion: The function to measure the quality of a split.
-    :param max_features: The number of features for the random forest model.
+    :param max_features: The number of features for the extra trees model.
     :param max_depth: The maximum depth of the tree.
     :param bootstrap: Whether to use bootstrap sampling.
+    :param use_permutation: Whether to use permutation importance.
+    :param permutation_n: The number of permutations repeat samples to use.
     :param random_state: numpy random state to use.
     :return: The pairwise correlation between X and y.
     """
@@ -119,6 +149,8 @@ def get_corr(X: numpy.array,
                                        max_features=max_features,
                                        max_depth=max_depth,
                                        bootstrap=bootstrap,
+                                       use_permutation=use_permutation,
+                                       permutation_n=permutation_n,
                                        random_state=random_state)
     elif method == "regression":
         return get_corr_regression(X=X,
@@ -128,6 +160,8 @@ def get_corr(X: numpy.array,
                                    max_features=max_features,
                                    max_depth=max_depth,
                                    bootstrap=bootstrap,
+                                   use_permutation=use_permutation,
+                                   permutation_n=permutation_n,
                                    random_state=random_state)
 
 
@@ -139,17 +173,21 @@ def get_pairwise_corr(X: numpy.array,
                       max_features: Union[str, int, float] = "auto",
                       max_depth: int = None,
                       bootstrap: bool = True,
+                      use_permutation: bool = False,
+                      permutation_n: int = 5,
                       random_state: numpy.random.RandomState = None):
     """
     Get the pairwise correlation between all columns in X.
 
     :param X: The input array.
     :param method: The method to use: classification or regression
-    :param num_trees: The number of decision trees in the random forest ensemble.
+    :param num_trees: The number of decision trees in the extra trees ensemble.
     :param criterion: The function to measure the quality of a split.
-    :param max_features: The number of features for the random forest model.
+    :param max_features: The number of features for the extra trees model.
     :param max_depth: The maximum depth of the tree.
     :param bootstrap: Whether to use bootstrap sampling.
+    :param use_permutation: Whether to use permutation importance.
+    :param permutation_n: The number of permutations repeat samples to use.
     :param random_state: numpy random state to use.
     :return: The pairwise correlation between X and y.
     """
@@ -185,14 +223,19 @@ def get_pairwise_corr(X: numpy.array,
         # set into matrix
         XX = X[lag_feature_index, :][:, feature_index]
         yy = X[lag_target_index, :][:, target_index]
-        corr_mat[target_index, feature_index] = get_corr(X=XX,
-                                                         y=yy,
-                                                         method=method,
-                                                         num_trees=num_trees,
-                                                         criterion=criterion,
-                                                         max_features=max_features,
-                                                         max_depth=max_depth,
-                                                         bootstrap=bootstrap,
-                                                         random_state=random_state)
-
+        r = get_corr(X=XX,
+                     y=yy,
+                     method=method,
+                     num_trees=num_trees,
+                     criterion=criterion,
+                     max_features=max_features,
+                     max_depth=max_depth,
+                     bootstrap=bootstrap,
+                     use_permutation=use_permutation,
+                     permutation_n=permutation_n,
+                     random_state=random_state)
+        if use_permutation:
+            corr_mat[target_index, feature_index] = r.importances_mean
+        else:
+            corr_mat[target_index, feature_index] = r
     return corr_mat

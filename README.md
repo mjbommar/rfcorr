@@ -92,28 +92,12 @@ import numpy
 import pandas
 import rfcorr.random_forest
 
+# create sample data
 x = numpy.arange(0, 8*numpy.pi, 0.1)
 y1 = numpy.sqrt(x)
 y2 = numpy.sin(x)
 
-df = pandas.DataFrame(zip(x, y1, y2), columns=["x", "y1", "y2"])
-df.corr(method="pearson")
-
-"""
-	x	y1	y2
-x	1.000000	0.978639	-0.194091
-y1	0.978639	1.000000	-0.206973
-y2	-0.194091	-0.206973	1.000000
-"""
-
-df.corr(method="spearman")
-"""
-x	y1	y2
-x	1.000000	1.000000	-0.186751
-y1	1.000000	1.000000	-0.186751
-y2	-0.186751	-0.186751	1.000000
-"""
-
+# fix random state/RNG
 rs = numpy.random.RandomState(42)
 pandas.DataFrame(rfcorr.random_forest.get_pairwise_corr(df.values, 
                                                       num_trees=1000,
@@ -129,6 +113,29 @@ x	1.000000	1.919737	0.001276
 y1	1.965436	1.000000	0.003697
 y2	0.649579	0.628396	1.000000
 """
+#NB: ~0 correlation for x~y2 and y1~y2
+
+# compare with pearson
+df = pandas.DataFrame(zip(x, y1, y2), columns=["x", "y1", "y2"])
+df.corr(method="pearson")
+
+"""
+	x	y1	y2
+x	1.000000	0.978639	-0.194091
+y1	0.978639	1.000000	-0.206973
+y2	-0.194091	-0.206973	1.000000
+"""
+
+# compare with spearman
+df.corr(method="spearman")
+"""
+x	y1	y2
+x	1.000000	1.000000	-0.186751
+y1	1.000000	1.000000	-0.186751
+y2	-0.186751	-0.186751	1.000000
+"""
+
+
 ```
 
 ## LICENSE

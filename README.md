@@ -77,7 +77,8 @@ There are, however, downsides:
  * TODO: Histogram-based Gradient Boosting Trees
  * TODO: Gradient-Boosting Trees
  * TODO: xgboost support
-
+ * TODO: Support exposing intervals (std, range) from permutation-based estimates
+  
 ## EXAMPLE USE
 
 There are sample notebooks in the `notebooks/` directory, including:

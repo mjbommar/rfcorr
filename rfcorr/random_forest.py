@@ -35,6 +35,7 @@ def get_corr_classification(X: numpy.array,
                             num_trees: int = 100,
                             max_features: Union[str, int, float] = "auto",
                             max_depth: int = None,
+                            bootstrap: bool = True,
                             random_state: numpy.random.RandomState = None):
     """
     Get a random forest correlation with classifier-based feature importance
@@ -46,6 +47,7 @@ def get_corr_classification(X: numpy.array,
     :param num_trees: The number of decision trees in the random forest ensemble.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
+    :param bootstrap: Whether to use bootstrap sampling.
     :param random_state: numpy random state to use.
     :return: The correlation between X and y.
 
@@ -53,6 +55,7 @@ def get_corr_classification(X: numpy.array,
     rf_model = sklearn.ensemble.RandomForestClassifier(n_estimators=num_trees,
                                                        max_features=max_features,
                                                        max_depth=max_depth,
+                                                       bootstrap=bootstrap,
                                                        random_state=random_state) \
         .fit(X, transform(y))
     return rf_model.feature_importances_
@@ -63,6 +66,7 @@ def get_corr_regression(X: numpy.array,
                         num_trees: int = 100,
                         max_features: Union[str, int, float] = "auto",
                         max_depth: int = None,
+                        bootstrap: bool = True,
                         random_state: numpy.random.RandomState = None):
     """
     Get a random forest correlation with classifier-based feature importance
@@ -74,11 +78,13 @@ def get_corr_regression(X: numpy.array,
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
     :param random_state: numpy random state to use.
+    :param bootstrap: Whether to use bootstrap sampling.
     :return: The correlation between X and y.
     """
     rf_model = sklearn.ensemble.RandomForestRegressor(n_estimators=num_trees,
                                                       max_features=max_features,
                                                       max_depth=max_depth,
+                                                      bootstrap=bootstrap,
                                                       random_state=random_state) \
         .fit(X, y)
     return rf_model.feature_importances_
@@ -90,6 +96,7 @@ def get_corr(X: numpy.array,
              num_trees: int = 100,
              max_features: Union[str, int, float] = "auto",
              max_depth: int = None,
+             bootstrap: bool = True,
              random_state: numpy.random.RandomState = None):
     """
     Get the "correlation" between array of features X and target column y.
@@ -100,6 +107,7 @@ def get_corr(X: numpy.array,
     :param num_trees: The number of decision trees in the random forest ensemble.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
+    :param bootstrap: Whether to use bootstrap sampling.
     :param random_state: numpy random state to use.
     :return: The pairwise correlation between X and y.
     """
@@ -118,6 +126,7 @@ def get_corr(X: numpy.array,
                                        num_trees=num_trees,
                                        max_features=max_features,
                                        max_depth=max_depth,
+                                       bootstrap=bootstrap,
                                        random_state=random_state)
     elif method == "regression":
         return get_corr_regression(X=X,
@@ -125,6 +134,7 @@ def get_corr(X: numpy.array,
                                    num_trees=num_trees,
                                    max_features=max_features,
                                    max_depth=max_depth,
+                                   bootstrap=bootstrap,
                                    random_state=random_state)
 
 
@@ -134,6 +144,7 @@ def get_pairwise_corr(X: numpy.array,
                       num_trees: int = 100,
                       max_features: Union[str, int, float] = "auto",
                       max_depth: int = None,
+                      bootstrap: bool = True,
                       random_state: numpy.random.RandomState = None):
     """
     Get the pairwise correlation between all columns in X.
@@ -143,6 +154,7 @@ def get_pairwise_corr(X: numpy.array,
     :param num_trees: The number of decision trees in the random forest ensemble.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
+    :param bootstrap: Whether to use bootstrap sampling.
     :param random_state: numpy random state to use.
     :return: The pairwise correlation between X and y.
     """
@@ -177,6 +189,7 @@ def get_pairwise_corr(X: numpy.array,
                                                          num_trees=num_trees,
                                                          max_features=max_features,
                                                          max_depth=max_depth,
+                                                         bootstrap=bootstrap,
                                                          random_state=random_state)
 
     return corr_mat

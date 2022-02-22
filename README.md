@@ -32,8 +32,28 @@
     <strong>Project Homepage:</strong> <a href="https://github.com/mjbommar/rfcorr">GitHub</a>
     <br />
     <strong><a href="https://www.linkedin.com/posts/bommarito_github-mjbommarrfcorr-random-forest-based-activity-6899361292889460736-HhKp">Original Announcement</a></strong>
+    <br />
+   <strong><a href="https://pypi.org/project/rfcorr/">PyPI</a></strong>
   </p>
 </div>
+
+## INSTALL
+```bash
+$ pip install rfcorr
+```
+
+## USE
+```python
+import rfcorr.random_forest
+
+# df = pandas.DataFrame of data with features/variables in columns
+rfcorr.random_forest.get_pairwise_corr(df.values,
+                                       num_trees=100, # number of trees in forest - bigger => tighter estimates
+                                       lag=0, # lag feature-target variable => allows for asymmetric R(x,y) != R(y,x)
+                                       method="regression", # estimate using regression or classification task
+                                       use_permutation=True # permutation- or impurity-based importance estimates
+)
+```
 
 ## WHY?
 Countless tasks rely on conceptions and formalizations of "correlation."  But in two decades of working in areas that utilize correlation
@@ -77,7 +97,8 @@ There are, however, downsides:
  * TODO: Histogram-based Gradient Boosting Trees
  * TODO: Gradient-Boosting Trees
  * TODO: xgboost support
-
+ * TODO: Support exposing intervals (std, range) from permutation-based estimates
+  
 ## EXAMPLE USE
 
 There are sample notebooks in the `notebooks/` directory, including:
@@ -91,28 +112,12 @@ import numpy
 import pandas
 import rfcorr.random_forest
 
+# create sample data
 x = numpy.arange(0, 8*numpy.pi, 0.1)
 y1 = numpy.sqrt(x)
 y2 = numpy.sin(x)
 
-df = pandas.DataFrame(zip(x, y1, y2), columns=["x", "y1", "y2"])
-df.corr(method="pearson")
-
-"""
-	x	y1	y2
-x	1.000000	0.978639	-0.194091
-y1	0.978639	1.000000	-0.206973
-y2	-0.194091	-0.206973	1.000000
-"""
-
-df.corr(method="spearman")
-"""
-x	y1	y2
-x	1.000000	1.000000	-0.186751
-y1	1.000000	1.000000	-0.186751
-y2	-0.186751	-0.186751	1.000000
-"""
-
+# fix random state/RNG
 rs = numpy.random.RandomState(42)
 pandas.DataFrame(rfcorr.random_forest.get_pairwise_corr(df.values, 
                                                       num_trees=1000,
@@ -128,7 +133,33 @@ x	1.000000	1.919737	0.001276
 y1	1.965436	1.000000	0.003697
 y2	0.649579	0.628396	1.000000
 """
+#NB: ~0 correlation for x~y2 and y1~y2
+
+# compare with pearson
+df = pandas.DataFrame(zip(x, y1, y2), columns=["x", "y1", "y2"])
+df.corr(method="pearson")
+
+"""
+	x	y1	y2
+x	1.000000	0.978639	-0.194091
+y1	0.978639	1.000000	-0.206973
+y2	-0.194091	-0.206973	1.000000
+"""
+
+# compare with spearman
+df.corr(method="spearman")
+"""
+x	y1	y2
+x	1.000000	1.000000	-0.186751
+y1	1.000000	1.000000	-0.186751
+y2	-0.186751	-0.186751	1.000000
+"""
+
+
 ```
+
+## HISTORY
+ * 0.1.0, 2022-02-22: Initial PyPI release
 
 ## LICENSE
 Apache 2.0

@@ -16,6 +16,7 @@ def get_corr_classification(X: numpy.array,
                             y: numpy.array,
                             transform: Callable = sign_without_zero,
                             num_trees: int = 100,
+                            criterion: str = "gini",
                             max_features: Union[str, int, float] = "auto",
                             max_depth: int = None,
                             bootstrap: bool = True,
@@ -28,6 +29,7 @@ def get_corr_classification(X: numpy.array,
     :param y: The output array.
     :param transform: A function to transform the label array if it is continuous
     :param num_trees: The number of decision trees in the random forest ensemble.
+    :param criterion: The function to measure the quality of a split.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
     :param bootstrap: Whether to use bootstrap sampling.
@@ -36,6 +38,7 @@ def get_corr_classification(X: numpy.array,
 
     """
     et_model = sklearn.ensemble.ExtraTreesClassifier(n_estimators=num_trees,
+                                                     criterion=criterion,
                                                        max_features=max_features,
                                                        max_depth=max_depth,
                                                        bootstrap=bootstrap,
@@ -47,6 +50,7 @@ def get_corr_classification(X: numpy.array,
 def get_corr_regression(X: numpy.array,
                         y: numpy.array,
                         num_trees: int = 100,
+                        criterion: str = "squared_error",
                         max_features: Union[str, int, float] = "auto",
                         max_depth: int = None,
                         bootstrap: bool = True,
@@ -58,6 +62,7 @@ def get_corr_regression(X: numpy.array,
     :param X: The input array.
     :param y: The output array.
     :param num_trees: The number of decision trees in the random forest ensemble.
+    :param criterion: The function to measure the quality of a split.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
     :param random_state: numpy random state to use.
@@ -65,6 +70,7 @@ def get_corr_regression(X: numpy.array,
     :return: The correlation between X and y.
     """
     et_model = sklearn.ensemble.ExtraTreesRegressor(n_estimators=num_trees,
+                                                    criterion=criterion,
                                                       max_features=max_features,
                                                       max_depth=max_depth,
                                                       bootstrap=bootstrap,
@@ -77,6 +83,7 @@ def get_corr(X: numpy.array,
              y: numpy.array,
              method: str = "classification",
              num_trees: int = 100,
+             criterion: str = "gini",
              max_features: Union[str, int, float] = "auto",
              max_depth: int = None,
              bootstrap: bool = True,
@@ -88,6 +95,7 @@ def get_corr(X: numpy.array,
     :param y: The output array.
     :param method: The method to use: classification or regression
     :param num_trees: The number of decision trees in the random forest ensemble.
+    :param criterion: The function to measure the quality of a split.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
     :param bootstrap: Whether to use bootstrap sampling.
@@ -107,6 +115,7 @@ def get_corr(X: numpy.array,
                                        y=y,
                                        transform=sign_without_zero,
                                        num_trees=num_trees,
+                                       criterion=criterion,
                                        max_features=max_features,
                                        max_depth=max_depth,
                                        bootstrap=bootstrap,
@@ -115,6 +124,7 @@ def get_corr(X: numpy.array,
         return get_corr_regression(X=X,
                                    y=y,
                                    num_trees=num_trees,
+                                   criterion=criterion,
                                    max_features=max_features,
                                    max_depth=max_depth,
                                    bootstrap=bootstrap,
@@ -125,6 +135,7 @@ def get_pairwise_corr(X: numpy.array,
                       method: str = "classification",
                       lag: int = 0,
                       num_trees: int = 100,
+                      criterion: str = "gini",
                       max_features: Union[str, int, float] = "auto",
                       max_depth: int = None,
                       bootstrap: bool = True,
@@ -135,6 +146,7 @@ def get_pairwise_corr(X: numpy.array,
     :param X: The input array.
     :param method: The method to use: classification or regression
     :param num_trees: The number of decision trees in the random forest ensemble.
+    :param criterion: The function to measure the quality of a split.
     :param max_features: The number of features for the random forest model.
     :param max_depth: The maximum depth of the tree.
     :param bootstrap: Whether to use bootstrap sampling.
@@ -170,6 +182,7 @@ def get_pairwise_corr(X: numpy.array,
                                                          y=yy,
                                                          method=method,
                                                          num_trees=num_trees,
+                                                         criterion=criterion,
                                                          max_features=max_features,
                                                          max_depth=max_depth,
                                                          bootstrap=bootstrap,

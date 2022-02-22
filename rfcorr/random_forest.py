@@ -8,25 +8,8 @@ from typing import Union, Callable
 import numpy
 import sklearn.ensemble
 
-
-def sign_with_zero(x: numpy.array):
-    """
-    Get the sign of x, but with zero treated as zero.
-    Results in three-class/ternary labels.
-    :param x:
-    :return:
-    """
-    return numpy.sign(x).astype(numpy.int)
-
-
-def sign_without_zero(x: numpy.array):
-    """
-    Get the sign of x, but with zero treated as zero.
-    Results in two-class/binary labels.
-    :param x:
-    :return:
-    """
-    return (x >= 0).astype(numpy.int)
+# local imports
+from .sign import sign_without_zero
 
 
 def get_corr_classification(X: numpy.array,

@@ -135,7 +135,7 @@ def get_pairwise_corr(X: numpy.array,
                       method: str = "classification",
                       lag: int = 0,
                       num_trees: int = 100,
-                      criterion: str = "gini",
+                      criterion: str = None,
                       max_features: Union[str, int, float] = "auto",
                       max_depth: int = None,
                       bootstrap: bool = True,
@@ -156,6 +156,13 @@ def get_pairwise_corr(X: numpy.array,
     # check method
     if method not in ["classification", "regression"]:
         raise ValueError("method must be either classification or regression.")
+
+    # handle criterion
+    if criterion is None:
+        if method == "classification":
+            criterion = "gini"
+        elif method == "regression":
+            criterion = "squared_error"
 
     # check that we have sufficient samples for the lag
     if lag > X.shape[0] + 2:

@@ -1,8 +1,17 @@
 [tool.poetry]
 name = "rfcorr"
 version = "0.1.0"
-description = "Random Forest-inspired correlation methods"
-authors = ["mjbommar <michael@bommaritollc.com>"]
+description = "Random Forest-inspired correlation/dependence methods"
+repository = 'https://github.com/mjbommar/rfcorr'
+readme = 'README.md'
+authors = ["Michael Bommarito <michael@bommaritollc.com>"]
+keywords = ['ml', 'correlation', 'random forest', 'sklearn', 'machine learning', 'dependence']
+classifiers = ["Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+license = 'Apache-2.0'
 
 [tool.poetry.dependencies]
 python = "^3.8"

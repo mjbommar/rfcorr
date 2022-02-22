@@ -32,8 +32,28 @@
     <strong>Project Homepage:</strong> <a href="https://github.com/mjbommar/rfcorr">GitHub</a>
     <br />
     <strong><a href="https://www.linkedin.com/posts/bommarito_github-mjbommarrfcorr-random-forest-based-activity-6899361292889460736-HhKp">Original Announcement</a></strong>
+    <br />
+   <strong><a href="https://pypi.org/project/rfcorr/">PyPI</a></strong>
   </p>
 </div>
+
+## INSTALL
+```bash
+$ pip install rfcorr
+```
+
+## USE
+```python
+import rfcorr.random_forest
+
+# df = pandas.DataFrame of data with features/variables in columns
+rfcorr.random_forest.get_pairwise_corr(df.values,
+                                       num_trees=100, # number of trees in forest - bigger => tighter estimates
+                                       lag=0, # lag feature-target variable => allows for asymmetric R(x,y) != R(y,x)
+                                       method="regression", # estimate using regression or classification task
+                                       use_permutation=True # permutation- or impurity-based importance estimates
+)
+```
 
 ## WHY?
 Countless tasks rely on conceptions and formalizations of "correlation."  But in two decades of working in areas that utilize correlation
@@ -137,6 +157,9 @@ y2	-0.186751	-0.186751	1.000000
 
 
 ```
+
+## HISTORY
+ * 0.1.0, 2022-02-22: Initial PyPI release
 
 ## LICENSE
 Apache 2.0

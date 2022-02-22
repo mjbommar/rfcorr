@@ -13,17 +13,19 @@ import sklearn.inspection
 from .sign import sign_without_zero
 
 
-def get_corr_classification(X: numpy.array,
-                            y: numpy.array,
-                            transform: Callable = sign_without_zero,
-                            num_trees: int = 100,
-                            criterion: str = "gini",
-                            max_features: Union[str, int, float] = "auto",
-                            max_depth: int = None,
-                            bootstrap: bool = True,
-                            use_permutation: bool = False,
-                            permutation_n: int = 5,
-                            random_state: numpy.random.RandomState = None):
+def get_corr_classification(
+    X: numpy.array,
+    y: numpy.array,
+    transform: Callable = sign_without_zero,
+    num_trees: int = 100,
+    criterion: str = "gini",
+    max_features: Union[str, int, float] = "auto",
+    max_depth: int = None,
+    bootstrap: bool = True,
+    use_permutation: bool = False,
+    permutation_n: int = 5,
+    random_state: numpy.random.RandomState = None,
+):
     """
     Get a random forest correlation with classifier-based feature importance
     based on features X on regression target y.
@@ -42,35 +44,36 @@ def get_corr_classification(X: numpy.array,
     :return: The correlation between X and y.
 
     """
-    rf_model = sklearn.ensemble.RandomForestClassifier(n_estimators=num_trees,
-                                                       criterion=criterion,
-                                                       max_features=max_features,
-                                                       max_depth=max_depth,
-                                                       bootstrap=bootstrap,
-                                                       random_state=random_state) \
-        .fit(X, transform(y))
+    rf_model = sklearn.ensemble.RandomForestClassifier(
+        n_estimators=num_trees,
+        criterion=criterion,
+        max_features=max_features,
+        max_depth=max_depth,
+        bootstrap=bootstrap,
+        random_state=random_state,
+    ).fit(X, transform(y))
 
     # handle permutation importance case
     if use_permutation:
-        return sklearn.inspection.permutation_importance(rf_model,
-                                                         X,
-                                                         y,
-                                                         n_repeats=permutation_n,
-                                                         random_state=random_state)
+        return sklearn.inspection.permutation_importance(
+            rf_model, X, y, n_repeats=permutation_n, random_state=random_state
+        )
     else:
         return rf_model.feature_importances_
 
 
-def get_corr_regression(X: numpy.array,
-                        y: numpy.array,
-                        num_trees: int = 100,
-                        criterion: str = "squared_error",
-                        max_features: Union[str, int, float] = "auto",
-                        max_depth: int = None,
-                        bootstrap: bool = True,
-                        use_permutation: bool = False,
-                        permutation_n: int = 5,
-                        random_state: numpy.random.RandomState = None):
+def get_corr_regression(
+    X: numpy.array,
+    y: numpy.array,
+    num_trees: int = 100,
+    criterion: str = "squared_error",
+    max_features: Union[str, int, float] = "auto",
+    max_depth: int = None,
+    bootstrap: bool = True,
+    use_permutation: bool = False,
+    permutation_n: int = 5,
+    random_state: numpy.random.RandomState = None,
+):
     """
     Get a random forest correlation with classifier-based feature importance
     based on features X on classification labels y.
@@ -87,35 +90,36 @@ def get_corr_regression(X: numpy.array,
     :param permutation_n: The number of permutations repeat samples to use.
     :return: The correlation between X and y.
     """
-    rf_model = sklearn.ensemble.RandomForestRegressor(n_estimators=num_trees,
-                                                      criterion=criterion,
-                                                      max_features=max_features,
-                                                      max_depth=max_depth,
-                                                      bootstrap=bootstrap,
-                                                      random_state=random_state) \
-        .fit(X, y)
+    rf_model = sklearn.ensemble.RandomForestRegressor(
+        n_estimators=num_trees,
+        criterion=criterion,
+        max_features=max_features,
+        max_depth=max_depth,
+        bootstrap=bootstrap,
+        random_state=random_state,
+    ).fit(X, y)
     # handle permutation importance case
     if use_permutation:
-        return sklearn.inspection.permutation_importance(rf_model,
-                                                         X,
-                                                         y,
-                                                         n_repeats=permutation_n,
-                                                         random_state=random_state)
+        return sklearn.inspection.permutation_importance(
+            rf_model, X, y, n_repeats=permutation_n, random_state=random_state
+        )
     else:
         return rf_model.feature_importances_
 
 
-def get_corr(X: numpy.array,
-             y: numpy.array,
-             method: str = "classification",
-             num_trees: int = 100,
-             criterion: str = "gini",
-             max_features: Union[str, int, float] = "auto",
-             max_depth: int = None,
-             bootstrap: bool = True,
-             use_permutation: bool = False,
-             permutation_n: int = 5,
-             random_state: numpy.random.RandomState = None):
+def get_corr(
+    X: numpy.array,
+    y: numpy.array,
+    method: str = "classification",
+    num_trees: int = 100,
+    criterion: str = "gini",
+    max_features: Union[str, int, float] = "auto",
+    max_depth: int = None,
+    bootstrap: bool = True,
+    use_permutation: bool = False,
+    permutation_n: int = 5,
+    random_state: numpy.random.RandomState = None,
+):
     """
     Get the "correlation" between array of features X and target column y.
 
@@ -141,41 +145,47 @@ def get_corr(X: numpy.array,
     if method not in ["classification", "regression"]:
         raise ValueError("method must be either classification or regression.")
     elif method == "classification":
-        return get_corr_classification(X=X,
-                                       y=y,
-                                       transform=sign_without_zero,
-                                       num_trees=num_trees,
-                                       criterion=criterion,
-                                       max_features=max_features,
-                                       max_depth=max_depth,
-                                       bootstrap=bootstrap,
-                                       use_permutation=use_permutation,
-                                       permutation_n=permutation_n,
-                                       random_state=random_state)
+        return get_corr_classification(
+            X=X,
+            y=y,
+            transform=sign_without_zero,
+            num_trees=num_trees,
+            criterion=criterion,
+            max_features=max_features,
+            max_depth=max_depth,
+            bootstrap=bootstrap,
+            use_permutation=use_permutation,
+            permutation_n=permutation_n,
+            random_state=random_state,
+        )
     elif method == "regression":
-        return get_corr_regression(X=X,
-                                   y=y,
-                                   num_trees=num_trees,
-                                   criterion=criterion,
-                                   max_features=max_features,
-                                   max_depth=max_depth,
-                                   bootstrap=bootstrap,
-                                   use_permutation=use_permutation,
-                                   permutation_n=permutation_n,
-                                   random_state=random_state)
+        return get_corr_regression(
+            X=X,
+            y=y,
+            num_trees=num_trees,
+            criterion=criterion,
+            max_features=max_features,
+            max_depth=max_depth,
+            bootstrap=bootstrap,
+            use_permutation=use_permutation,
+            permutation_n=permutation_n,
+            random_state=random_state,
+        )
 
 
-def get_pairwise_corr(X: numpy.array,
-                      method: str = "classification",
-                      lag: int = 0,
-                      num_trees: int = 100,
-                      criterion: str = None,
-                      max_features: Union[str, int, float] = "auto",
-                      max_depth: int = None,
-                      bootstrap: bool = True,
-                      use_permutation: bool = False,
-                      permutation_n: int = 5,
-                      random_state: numpy.random.RandomState = None):
+def get_pairwise_corr(
+    X: numpy.array,
+    method: str = "classification",
+    lag: int = 0,
+    num_trees: int = 100,
+    criterion: str = None,
+    max_features: Union[str, int, float] = "auto",
+    max_depth: int = None,
+    bootstrap: bool = True,
+    use_permutation: bool = False,
+    permutation_n: int = 5,
+    random_state: numpy.random.RandomState = None,
+):
     """
     Get the pairwise correlation between all columns in X.
 
@@ -223,17 +233,19 @@ def get_pairwise_corr(X: numpy.array,
         # set into matrix
         XX = X[lag_feature_index, :][:, feature_index]
         yy = X[lag_target_index, :][:, target_index]
-        r = get_corr(X=XX,
-                     y=yy,
-                     method=method,
-                     num_trees=num_trees,
-                     criterion=criterion,
-                     max_features=max_features,
-                     max_depth=max_depth,
-                     bootstrap=bootstrap,
-                     use_permutation=use_permutation,
-                     permutation_n=permutation_n,
-                     random_state=random_state)
+        r = get_corr(
+            X=XX,
+            y=yy,
+            method=method,
+            num_trees=num_trees,
+            criterion=criterion,
+            max_features=max_features,
+            max_depth=max_depth,
+            bootstrap=bootstrap,
+            use_permutation=use_permutation,
+            permutation_n=permutation_n,
+            random_state=random_state,
+        )
         if use_permutation:
             corr_mat[target_index, feature_index] = r.importances_mean
         else:

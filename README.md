@@ -94,6 +94,12 @@ There are, however, downsides:
    - `get_corr`: Convenience handler including lag support for (x, y)
    - `get_pairwise_corr`: Convenience handler including lag support for full matrix X
    - Support for impurity-based or permutation-based importances (`use_permutation=True`)
+ * CatBoost (`rfcorr.cat`) (WIP)
+   - `get_corr_classification`: Correlation from classification task
+   - `get_corr_regression`: Correlation from regression task
+   - `get_corr`: Convenience handler including lag support for (x, y)
+   - `get_pairwise_corr`: Convenience handler including lag support for full matrix X
+   - Support for GPU training and limited subset of catboost training parameters
  * TODO: Histogram-based Gradient Boosting Trees
  * TODO: Gradient-Boosting Trees
  * TODO: xgboost support

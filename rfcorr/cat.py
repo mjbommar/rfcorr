@@ -13,15 +13,15 @@ from rfcorr.sign import sign_without_zero
 
 
 def get_corr_classification(
-        X: numpy.array,
-        y: numpy.array,
-        num_iterations: Optional[int] = None,
-        num_trees: Optional[int] = None,
-        learning_rate: Optional[float] = None,
-        max_depth: Optional[int] = None,
-        cat_features: Union[List[int], numpy.array] = None,
-        task_type: str = "CPU",
-        random_state: numpy.random.RandomState = None,
+    X: numpy.array,
+    y: numpy.array,
+    num_iterations: Optional[int] = None,
+    num_trees: Optional[int] = None,
+    learning_rate: Optional[float] = None,
+    max_depth: Optional[int] = None,
+    cat_features: Union[List[int], numpy.array] = None,
+    task_type: str = "CPU",
+    random_state: numpy.random.RandomState = None,
 ):
     """
     Get a random forest correlation with classifier-based feature importance
@@ -54,16 +54,16 @@ def get_corr_classification(
 
 
 def get_corr_regression(
-        X: numpy.array,
-        y: numpy.array,
-        loss_function: str = "RMSE",
-        num_iterations: Optional[int] = None,
-        num_trees: Optional[int] = None,
-        max_depth: Optional[int] = None,
-        learning_rate: Optional[float] = None,
-        cat_features: Union[List[int], numpy.array] = None,
-        task_type: str = "CPU",
-        random_state: numpy.random.RandomState = None,
+    X: numpy.array,
+    y: numpy.array,
+    loss_function: str = "RMSE",
+    num_iterations: Optional[int] = None,
+    num_trees: Optional[int] = None,
+    max_depth: Optional[int] = None,
+    learning_rate: Optional[float] = None,
+    cat_features: Union[List[int], numpy.array] = None,
+    task_type: str = "CPU",
+    random_state: numpy.random.RandomState = None,
 ):
     """
     Get a random forest correlation with classifier-based feature importance
@@ -98,17 +98,17 @@ def get_corr_regression(
 
 
 def get_corr(
-        X: numpy.array,
-        y: numpy.array,
-        method: str = "classification",
-        loss_function: Optional[str] = "RMSE",
-        num_iterations: Optional[int] = None,
-        num_trees: Optional[int] = None,
-        max_depth: Optional[int] = None,
-        learning_rate: Optional[float] = None,
-        cat_features: Union[List[int], numpy.array] = None,
-        task_type: str = "CPU",
-        random_state: numpy.random.RandomState = None,
+    X: numpy.array,
+    y: numpy.array,
+    method: str = "classification",
+    loss_function: Optional[str] = "RMSE",
+    num_iterations: Optional[int] = None,
+    num_trees: Optional[int] = None,
+    max_depth: Optional[int] = None,
+    learning_rate: Optional[float] = None,
+    cat_features: Union[List[int], numpy.array] = None,
+    task_type: str = "CPU",
+    random_state: numpy.random.RandomState = None,
 ):
     """
     Get the "correlation" between array of features X and target column y.
@@ -162,17 +162,17 @@ def get_corr(
 
 
 def get_pairwise_corr(
-        X: numpy.array,
-        method: str = "classification",
-        lag: int = 0,
-        loss_function: Optional[str] = "RMSE",
-        num_iterations: Optional[int] = None,
-        num_trees: Optional[int] = None,
-        max_depth: Optional[int] = None,
-        learning_rate: Optional[float] = None,
-        cat_features: Union[List[int], numpy.array] = None,
-        task_type: str = "CPU",
-        random_state: numpy.random.RandomState = None,
+    X: numpy.array,
+    method: str = "classification",
+    lag: int = 0,
+    loss_function: Optional[str] = "RMSE",
+    num_iterations: Optional[int] = None,
+    num_trees: Optional[int] = None,
+    max_depth: Optional[int] = None,
+    learning_rate: Optional[float] = None,
+    cat_features: Union[List[int], numpy.array] = None,
+    task_type: str = "CPU",
+    random_state: numpy.random.RandomState = None,
 ):
     """
     Get the pairwise correlation between all columns in X.
@@ -212,15 +212,19 @@ def get_pairwise_corr(
         # setup feature column index
         feature_index = [i for i in range(X.shape[1]) if i != target_index]
         if cat_features is not None:
-            cat_feature_index = [(i < target_index) * i +
-                                 (i > target_index) * (i - 1)
-                                 for i in cat_features if i != target_index]
+            cat_feature_index = [
+                (i < target_index) * i + (i > target_index) * (i - 1)
+                for i in cat_features
+                if i != target_index
+            ]
         else:
             cat_feature_index = None
 
         # determine method to use if variable types are mixed
         if method == "auto":
-            target_method = "classification" if target_index in cat_features else "regression"
+            target_method = (
+                "classification" if target_index in cat_features else "regression"
+            )
         else:
             target_method = method
 

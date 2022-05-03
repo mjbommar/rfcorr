@@ -2,13 +2,13 @@
 import numpy
 
 # project imports
+import rfcorr.cat
 import rfcorr.extra_trees
 import rfcorr.random_forest
+from rfcorr.sign import sign_without_zero, sign_with_zero
 from rfcorr import __version__
 
 # setup RNG
-from sign import sign_without_zero
-
 SEED = 13785
 rs = numpy.random.RandomState(SEED)
 
@@ -176,6 +176,27 @@ def test_et_regression_permu():
         method="regression",
         use_permutation=True,
         random_state=rs,
+    )
+
+    assert isinstance(c, numpy.ndarray)
+
+
+def test_catboost_classification():
+    """
+    Test basic catboost classification
+    :return:
+    """
+    # TODO: set these up as fixtures
+    x = numpy.arange(0, 8 * numpy.pi, 0.5)
+    y1 = numpy.sqrt(x)
+
+    """
+    TODO: file catboost issue for `Object of type RandomState is not JSON serializable`
+    """
+    c = rfcorr.cat.get_pairwise_corr(
+        numpy.vstack((x, y1)).T,
+        method="auto",
+        # random_state=rs,
     )
 
     assert isinstance(c, numpy.ndarray)

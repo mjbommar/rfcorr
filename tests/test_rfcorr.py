@@ -5,6 +5,7 @@ import numpy
 import rfcorr.cat
 import rfcorr.extra_trees
 import rfcorr.random_forest
+import rfcorr.xgboost
 from rfcorr.sign import sign_without_zero, sign_with_zero
 from rfcorr import __version__
 
@@ -197,6 +198,27 @@ def test_catboost_classification():
         numpy.vstack((x, y1)).T,
         method="auto",
         # random_state=rs,
+    )
+
+    assert isinstance(c, numpy.ndarray)
+
+
+def test_xgboost_regression():
+    """
+    Test basic xgb classification
+    :return:
+    """
+    # TODO: set these up as fixtures
+    x = numpy.arange(-8 * numpy.pi, 8 * numpy.pi, 0.5)
+    y1 = numpy.sqrt(numpy.abs(x))
+
+    """
+    TODO: file catboost issue for `Object of type RandomState is not JSON serializable`
+    """
+    c = rfcorr.xgboost.get_pairwise_corr(
+        numpy.vstack((x, y1)).T,
+        method="regression",
+        random_state=rs,
     )
 
     assert isinstance(c, numpy.ndarray)

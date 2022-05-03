@@ -223,9 +223,16 @@ def get_pairwise_corr(
         # determine method to use if variable types are mixed
         if method == "auto":
             if cat_features is not None:
-                target_method = "classification" if target_index in cat_features else "regression"
+                target_method = (
+                    "classification" if target_index in cat_features else "regression"
+                )
             else:
-                if X[:, target_index].dtype in [numpy.float64, numpy.float32, numpy.int64, numpy.int32]:
+                if X[:, target_index].dtype in [
+                    numpy.float64,
+                    numpy.float32,
+                    numpy.int64,
+                    numpy.int32,
+                ]:
                     target_method = "regression"
                 else:
                     target_method = "classification"

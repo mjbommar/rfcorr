@@ -12,7 +12,7 @@ def sign_with_zero(x: numpy.array):
     :param x:
     :return:
     """
-    return numpy.sign(x).astype(numpy.int)
+    return numpy.sign(x).astype(int)
 
 
 def sign_without_zero(x: numpy.array):
@@ -22,4 +22,4 @@ def sign_without_zero(x: numpy.array):
     :param x:
     :return:
     """
-    return (x >= 0).astype(numpy.int)
+    return (x >= 0).astype(int)

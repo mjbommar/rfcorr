@@ -100,9 +100,13 @@ There are, however, downsides:
    - `get_corr`: Convenience handler including lag support for (x, y)
    - `get_pairwise_corr`: Convenience handler including lag support for full matrix X
    - Support for GPU training and limited subset of catboost training parameters
+ * xgboost (`rfcorr.xgboost`) (WIP)
+   - `get_corr_classification`: Correlation from classification task
+   - `get_corr_regression`: Correlation from regression task
+   - `get_corr`: Convenience handler including lag support for (x, y)
+   - `get_pairwise_corr`: Convenience handler including lag support for full matrix X
  * TODO: Histogram-based Gradient Boosting Trees
  * TODO: Gradient-Boosting Trees
- * TODO: xgboost support
  * TODO: Support exposing intervals (std, range) from permutation-based estimates
   
 ## EXAMPLE USE
@@ -166,6 +170,8 @@ y2	-0.186751	-0.186751	1.000000
 
 ## HISTORY
  * 0.1.0, 2022-02-22: Initial PyPI release
+ * 0.1.1, 2022-05-02: catboost support (available on GH as of 2022-03-28)
+ * 0.1.2, 2022-05-02: xgboost support
 
 ## LICENSE
 Apache 2.0
